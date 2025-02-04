@@ -5,7 +5,8 @@ import 'package:my_first_project/theme/light_mode.dart';
 class ThemeProvider with ChangeNotifier {
   ThemeData _themeData = lightMode;
   ThemeData get themeData => _themeData;
-  bool get isDarkMode => themeData == darkMode;
+
+  bool get isDarkMode => _themeData == darkMode;
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
