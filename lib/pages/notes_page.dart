@@ -1,0 +1,181 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_first_project/components/my_drawer.dart';
+import 'package:my_first_project/models/note.dart';
+import 'package:provider/provider.dart';
+import 'package:my_first_project/models/note_database.dart';
+
+class NotesPage extends StatefulWidget {
+  const NotesPage({super.key});
+
+  @override
+  State<NotesPage> createState() => _NotesPageState();
+}
+
+class _NotesPageState extends State<NotesPage> {
+  final textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    readNote();
+  }
+
+  // create note
+  void createNote() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: TextField(
+          controller: textController,
+        ),
+        actions: [
+          //  cancel button
+          MaterialButton(
+            onPressed: () {
+              textController.clear();
+              Navigator.pop(context);
+            },
+            child: const Text("cancel"),
+          ),
+          // create button
+          MaterialButton(
+            onPressed: () {
+              // add to the database
+              context.read<NoteDatabase>().addNote(textController.text);
+              textController.clear();
+              Navigator.pop(context);
+            },
+            child: const Text("create"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // read note
+  void readNote() {
+    context.read<NoteDatabase>().fetchNotes();
+  }
+
+  // update note
+
+  void updateNote(Note note) {
+    textController.text = note.text;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Update note"),
+        content: TextField(
+          controller: textController,
+        ),
+        actions: [
+          // cancel button
+          MaterialButton(
+            onPressed: () {
+              textController.clear();
+              Navigator.pop(context);
+            },
+            child: const Text("cancel"),
+          ),
+          // update button
+          MaterialButton(
+            onPressed: () {
+              // we gonna prefill the controller with the text we wanna update
+              context
+                  .read<NoteDatabase>()
+                  .updateNote(note.id, textController.text);
+              // clear the textfield
+              textController.clear();
+              // now we gonna pop the dialog box
+              Navigator.pop(context);
+            },
+            child: const Text("update"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // delete note
+  void deleteNote(int id) {
+    context.read<NoteDatabase>().deleteNote(id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // note database
+    final noteDatabase = context.watch<NoteDatabase>();
+    // current Notes
+    List<Note> currentNotes = noteDatabase.currentNotes;
+
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      floatingActionButton: FloatingActionButton(
+        onPressed: createNote,
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+      ),
+      drawer: MyDrawer(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // heading
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0),
+            child: Text(
+              "Notes",
+              style: GoogleFonts.dmSerifText(
+                  fontSize: 40,
+                  color: Theme.of(context).colorScheme.inversePrimary),
+            ),
+          ),
+          // list of notes
+          Expanded(
+            child: ListView.builder(
+              itemCount: currentNotes.length,
+              itemBuilder: (context, index) {
+                // get individual note
+                final note = currentNotes[index];
+                // return a list tile
+                return ListTile(
+                  title: Text(
+                    note.text,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // edit button
+                      IconButton(
+                        onPressed: () => updateNote(note),
+                        icon: Icon(
+                          Icons.edit,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                      // delete button
+                      IconButton(
+                        onPressed: () => deleteNote(note.id),
+                        icon: Icon(
+                          Icons.delete,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
