@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_first_project/components/my_drawer.dart';
+import 'package:my_first_project/components/note_tile.dart';
 import 'package:my_first_project/models/note.dart';
 import 'package:provider/provider.dart';
 import 'package:my_first_project/models/note_database.dart';
@@ -111,12 +112,13 @@ class _NotesPageState extends State<NotesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Colors.transparent,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+        elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: createNote,
         child: Icon(
           Icons.add,
@@ -129,7 +131,7 @@ class _NotesPageState extends State<NotesPage> {
         children: [
           // heading
           Padding(
-            padding: const EdgeInsets.only(left: 15.0),
+            padding: const EdgeInsets.only(left: 17.0),
             child: Text(
               "Notes",
               style: GoogleFonts.dmSerifText(
@@ -145,31 +147,10 @@ class _NotesPageState extends State<NotesPage> {
                 // get individual note
                 final note = currentNotes[index];
                 // return a list tile
-                return ListTile(
-                  title: Text(
-                    note.text,
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // edit button
-                      IconButton(
-                        onPressed: () => updateNote(note),
-                        icon: Icon(
-                          Icons.edit,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                      ),
-                      // delete button
-                      IconButton(
-                        onPressed: () => deleteNote(note.id),
-                        icon: Icon(
-                          Icons.delete,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                      )
-                    ],
-                  ),
+                return NoteTile(
+                  text: note.text,
+                  onEditPressed: () => updateNote(note),
+                  onDeletePressed: () => deleteNote(note.id),
                 );
               },
             ),

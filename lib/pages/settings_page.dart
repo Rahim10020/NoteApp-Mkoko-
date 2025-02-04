@@ -11,14 +11,16 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("SETTINGS"),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+        elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(12),
             ),
             margin: const EdgeInsets.only(

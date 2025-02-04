@@ -14,7 +14,7 @@ class MyDrawer extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 100),
           child: Icon(
-            Icons.add,
+            Icons.edit,
             size: 50,
           ),
         ),
