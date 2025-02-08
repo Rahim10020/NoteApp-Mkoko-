@@ -1,10 +1,10 @@
+import 'package:R_noteApp/components/my_drawer.dart';
+import 'package:R_noteApp/components/note_tile.dart';
+import 'package:R_noteApp/models/note.dart';
+import 'package:R_noteApp/models/note_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_first_project/components/my_drawer.dart';
-import 'package:my_first_project/components/note_tile.dart';
-import 'package:my_first_project/models/note.dart';
 import 'package:provider/provider.dart';
-import 'package:my_first_project/models/note_database.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});

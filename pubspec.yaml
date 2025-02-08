@@ -1,4 +1,4 @@
-name: my_first_project
+name: R_noteApp
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -61,7 +61,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/notepad.png"  
+  image_path: "assets/images/pencil.png"  
   adaptive_icon_background: "#ffffff"  
   remove_alpha_ios: true
 

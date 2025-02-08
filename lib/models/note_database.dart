@@ -1,6 +1,6 @@
+import 'package:R_noteApp/models/note.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:my_first_project/models/note.dart';
 import 'package:path_provider/path_provider.dart';
 
 class NoteDatabase extends ChangeNotifier {

@@ -1,5 +1,5 @@
+import 'package:R_noteApp/components/note_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:my_first_project/components/note_settings.dart';
 import 'package:popover/popover.dart';
 
 class NoteTile extends StatelessWidget {

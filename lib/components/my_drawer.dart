@@ -1,6 +1,6 @@
+import 'package:R_noteApp/components/my_drawer_tile.dart';
+import 'package:R_noteApp/pages/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'package:my_first_project/components/my_drawer_tile.dart';
-import 'package:my_first_project/pages/settings_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
