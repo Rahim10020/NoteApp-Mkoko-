@@ -1,11 +1,15 @@
 import 'package:R_noteApp/components/note_settings.dart';
+import 'package:R_noteApp/models/category_database.dart';
 import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class NoteTile extends StatelessWidget {
   final String text;
   final DateTime updatedAt;
+  final int? categoryId;
+  final bool isImportant;
   final Function()? onEditPressed;
   final Function()? onDeletePressed;
 
@@ -13,11 +17,12 @@ class NoteTile extends StatelessWidget {
     super.key,
     required this.text,
     required this.updatedAt,
+    this.categoryId,
+    required this.isImportant,
     required this.onEditPressed,
     required this.onDeletePressed,
   });
 
-  // Formater la date de manière lisible
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
@@ -35,7 +40,6 @@ class NoteTile extends StatelessWidget {
     }
   }
 
-  // Limiter le texte affiché
   String _getPreviewText() {
     if (text.length > 80) {
       return '${text.substring(0, 80)}...';
@@ -45,13 +49,23 @@ class NoteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final categoryDb = context.watch<CategoryDatabase>();
+
+    // Obtenir la couleur de la catégorie
+    final categoryColor = categoryDb.getCategoryColor(categoryId);
+    final backgroundColor =
+        categoryColor ?? Theme.of(context).colorScheme.primary;
+
+    // Calculer la couleur du texte en fonction de la luminosité du fond
+    final textColor = _getTextColor(backgroundColor);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Theme.of(context).colorScheme.primary,
+        color: backgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -60,28 +74,47 @@ class NoteTile extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, left: 16, right: 16),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        title: Text(
-          _getPreviewText(),
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.inversePrimary,
-            fontSize: 15,
-          ),
+        title: Row(
+          children: [
+            // Icône importante
+            if (isImportant)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                  size: 20,
+                ),
+              ),
+            Expanded(
+              child: Text(
+                _getPreviewText(),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
             _formatDate(updatedAt),
             style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
+              color: textColor.withOpacity(0.7),
               fontSize: 12,
             ),
           ),
         ),
         trailing: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.more_vert),
+            icon: Icon(
+              Icons.more_vert,
+              color: textColor,
+            ),
             onPressed: () => showPopover(
               width: 100,
               height: 100,
@@ -96,5 +129,11 @@ class NoteTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Déterminer la couleur du texte en fonction de la luminosité du fond
+  Color _getTextColor(Color backgroundColor) {
+    final luminance = backgroundColor.computeLuminance();
+    return luminance > 0.5 ? Colors.black : Colors.white;
   }
 }
