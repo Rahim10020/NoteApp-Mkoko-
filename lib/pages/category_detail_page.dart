@@ -137,6 +137,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                   },
                   controlAffinity: ListTileControlAffinity.leading,
                   contentPadding: EdgeInsets.zero,
+                  activeColor: importantColor, // Couleur de fond quand coché
+                  checkColor: Colors.white, // Couleur de la coche
                 ),
               ],
             ),
@@ -259,6 +261,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                   },
                   controlAffinity: ListTileControlAffinity.leading,
                   contentPadding: EdgeInsets.zero,
+                  activeColor: importantColor, // Couleur de fond quand coché
+                  checkColor: Colors.white, // Couleur de la coche
                 ),
               ],
             ),
