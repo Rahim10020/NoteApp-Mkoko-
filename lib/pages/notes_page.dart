@@ -94,6 +94,7 @@ class _NotesPageState extends State<NotesPage> {
                   .addNote(textController.text);
 
               if (success) {
+                if (!context.mounted) return;
                 textController.clear();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -192,6 +193,7 @@ class _NotesPageState extends State<NotesPage> {
                   .updateNote(note.id, textController.text);
 
               if (success) {
+                if (!context.mounted) return;
                 textController.clear();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -253,7 +255,7 @@ class _NotesPageState extends State<NotesPage> {
           ElevatedButton(
             onPressed: () async {
               final success = await context.read<NoteDatabase>().deleteNote(id);
-
+              if (!context.mounted) return;
               Navigator.pop(context);
 
               if (success) {

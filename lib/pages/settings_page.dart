@@ -92,7 +92,8 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) =>
                       Provider.of<ThemeProvider>(context, listen: false)
                           .toggleThemes(),
-                  activeColor: Theme.of(context).colorScheme.inversePrimary,
+                  activeTrackColor:
+                      Theme.of(context).colorScheme.inversePrimary,
                 ),
               ],
             ),
