@@ -124,7 +124,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   _nameController.clear();
                   Navigator.pop(context);
                 },
-                child: const Text('Annuler'),
+                child: Text(
+                  'Annuler',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
               ),
               ElevatedButton(
                 onPressed: () async {
@@ -161,7 +166,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     );
                   }
                 },
-                child: const Text('Créer'),
+                child: Text(
+                  'Créer',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
               ),
             ],
           );
