@@ -24,32 +24,34 @@ class NoteSettings extends StatelessWidget {
             height: 50,
             color: Theme.of(context).colorScheme.surface,
             child: Center(
-                child: Text(
-              "Edit",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                fontWeight: FontWeight.bold,
+              child: Text(
+                "Edit",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            )),
+            ),
           ),
         ),
-        // delete button
+        // Delete button
         GestureDetector(
           onTap: () {
             Navigator.pop(context);
-            onEditTap!();
+            onDeleteTap!();
           },
           child: Container(
             height: 50,
             color: Theme.of(context).colorScheme.surface,
             child: Center(
-                child: Text(
-              "Delete",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                fontWeight: FontWeight.bold,
+              child: Text(
+                "Delete",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            )),
+            ),
           ),
         ),
       ],
