@@ -61,9 +61,30 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   maxLength: 20,
                   decoration: InputDecoration(
                     labelText: 'Nom de la catégorie',
+                    labelStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    floatingLabelStyle: TextStyle(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary, // Couleur lors du focus
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    // bordure au focus
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 2,
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
+                  ),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
                 const SizedBox(height: 16),
