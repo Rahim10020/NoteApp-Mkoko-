@@ -155,7 +155,7 @@ class _NotesPageState extends State<NotesPage> {
                             });
                           },
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ],
@@ -347,7 +347,7 @@ class _NotesPageState extends State<NotesPage> {
                             });
                           },
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ],
@@ -599,7 +599,7 @@ class _NotesPageState extends State<NotesPage> {
                           });
                         },
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
                 const SizedBox(height: 20),
