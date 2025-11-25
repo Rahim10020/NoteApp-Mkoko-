@@ -531,7 +531,9 @@ class _NotesPageState extends State<NotesPage> {
                     children: const [
                       Icon(Icons.star, color: Colors.amber, size: 20),
                       SizedBox(width: 8),
-                      Text('Seulement les importantes'),
+                      Expanded(
+                        child: Text('Seulement les importantes'),
+                      ),
                     ],
                   ),
                   value: noteDb.filterImportant,
