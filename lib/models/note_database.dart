@@ -15,21 +15,29 @@ class NoteDatabase extends ChangeNotifier {
   // list of notes
   final List<Note> currentNotes = [];
 
-  // CREATE
-  Future<bool> addNote(String textFromUser) async {
+  // Filtres actifs
+  int? _filterCategoryId;
+  bool _filterImportant = false;
+  String _searchQuery = '';
+
+  // CREATE - Créer une note
+  Future<bool> addNote(
+    String textFromUser, {
+    int? categoryId,
+    bool isImportant = false,
+  }) async {
     try {
-      // Validation : ne pas créer de note vide
       if (textFromUser.trim().isEmpty) {
         return false;
       }
 
-      // Créer une nouvelle note avec les dates
       final newNote = Note()
         ..text = textFromUser.trim()
         ..createdAt = DateTime.now()
-        ..updatedAt = DateTime.now();
+        ..updatedAt = DateTime.now()
+        ..categoryId = categoryId
+        ..isImportant = isImportant;
 
-      // Sauvegarder dans la base de données
       await isar.writeTxn(() => isar.notes.put(newNote));
       await fetchNotes();
       return true;
@@ -39,13 +47,15 @@ class NoteDatabase extends ChangeNotifier {
     }
   }
 
-  // READ - tri par date (plus récentes en premier)
+  // READ - Récupérer toutes les notes avec filtres
   Future<void> fetchNotes() async {
     try {
-      List<Note> fetchedNotes = await isar.notes
-          .where()
-          .sortByUpdatedAtDesc() // Tri par date de modification décroissante
-          .findAll();
+      List<Note> fetchedNotes =
+          await isar.notes.where().sortByUpdatedAtDesc().findAll();
+
+      // Appliquer les filtres
+      fetchedNotes = _applyFilters(fetchedNotes);
+
       currentNotes.clear();
       currentNotes.addAll(fetchedNotes);
       notifyListeners();
@@ -54,10 +64,14 @@ class NoteDatabase extends ChangeNotifier {
     }
   }
 
-  // UPDATE
-  Future<bool> updateNote(int id, String newText) async {
+  // UPDATE - Modifier une note
+  Future<bool> updateNote(
+    int id,
+    String newText, {
+    int? categoryId,
+    bool? isImportant,
+  }) async {
     try {
-      // Validation
       if (newText.trim().isEmpty) {
         return false;
       }
@@ -65,7 +79,11 @@ class NoteDatabase extends ChangeNotifier {
       final existingNote = await isar.notes.get(id);
       if (existingNote != null) {
         existingNote.text = newText.trim();
-        existingNote.updatedAt = DateTime.now(); // Mise à jour de la date
+        existingNote.updatedAt = DateTime.now();
+        existingNote.categoryId = categoryId;
+        if (isImportant != null) {
+          existingNote.isImportant = isImportant;
+        }
         await isar.writeTxn(() => isar.notes.put(existingNote));
         await fetchNotes();
         return true;
@@ -77,7 +95,7 @@ class NoteDatabase extends ChangeNotifier {
     }
   }
 
-  // DELETE
+  // DELETE - Supprimer une note
   Future<bool> deleteNote(int id) async {
     try {
       await isar.writeTxn(() => isar.notes.delete(id));
@@ -89,28 +107,65 @@ class NoteDatabase extends ChangeNotifier {
     }
   }
 
-  // SEARCH
+  // Recherche de notes
   Future<void> searchNotes(String query) async {
-    try {
-      if (query.trim().isEmpty) {
-        await fetchNotes();
-        return;
-      }
-
-      List<Note> allNotes = await isar.notes.where().findAll();
-      List<Note> searchResults = allNotes
-          .where(
-              (note) => note.text.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-
-      // Trier les résultats par date
-      searchResults.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-
-      currentNotes.clear();
-      currentNotes.addAll(searchResults);
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Erreur lors de la recherche: $e');
-    }
+    _searchQuery = query;
+    await fetchNotes();
   }
+
+  // Filtrer par catégorie
+  void filterByCategory(int? categoryId) {
+    _filterCategoryId = categoryId;
+    fetchNotes();
+  }
+
+  // Filtrer par important
+  void filterByImportant(bool showOnlyImportant) {
+    _filterImportant = showOnlyImportant;
+    fetchNotes();
+  }
+
+  // Réinitialiser tous les filtres
+  void clearFilters() {
+    _filterCategoryId = null;
+    _filterImportant = false;
+    _searchQuery = '';
+    fetchNotes();
+  }
+
+  // Appliquer les filtres
+  List<Note> _applyFilters(List<Note> notes) {
+    var filtered = notes;
+
+    // Filtre de recherche
+    if (_searchQuery.trim().isNotEmpty) {
+      filtered = filtered
+          .where((note) =>
+              note.text.toLowerCase().contains(_searchQuery.toLowerCase()))
+          .toList();
+    }
+
+    // Filtre de catégorie
+    if (_filterCategoryId != null) {
+      filtered = filtered
+          .where((note) => note.categoryId == _filterCategoryId)
+          .toList();
+    }
+
+    // Filtre important
+    if (_filterImportant) {
+      filtered = filtered.where((note) => note.isImportant).toList();
+    }
+
+    return filtered;
+  }
+
+  // Getters pour les filtres actifs
+  int? get filterCategoryId => _filterCategoryId;
+  bool get filterImportant => _filterImportant;
+  String get searchQuery => _searchQuery;
+
+  // Vérifier si des filtres sont actifs
+  bool get hasActiveFilters =>
+      _filterCategoryId != null || _filterImportant || _searchQuery.isNotEmpty;
 }

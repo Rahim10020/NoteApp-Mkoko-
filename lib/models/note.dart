@@ -8,8 +8,14 @@ part 'note.g.dart';
 class Note {
   Id id = Isar.autoIncrement;
   late String text;
-  // Date de création
+
+  // Date de création et de modification
   late DateTime createdAt;
-  // Date de dernière modification
   late DateTime updatedAt;
+
+  // Catégorie (nullable car une note peut ne pas avoir de catégorie)
+  int? categoryId;
+
+  // Marqueur important (indépendant de la catégorie)
+  late bool isImportant;
 }
