@@ -39,7 +39,7 @@ class NoteDatabase extends ChangeNotifier {
     }
   }
 
-  // READ - ✅ AMÉLIORÉ avec tri par date (plus récentes en premier)
+  // READ - tri par date (plus récentes en premier)
   Future<void> fetchNotes() async {
     try {
       List<Note> fetchedNotes = await isar.notes
