@@ -133,6 +133,28 @@ class NoteDatabase extends ChangeNotifier {
     fetchNotes();
   }
 
+  // Récupérer les notes d'une catégorie spécifique
+  List<Note> getNotesByCategory(int categoryId) {
+    try {
+      // Récupérer toutes les notes de manière synchrone depuis la liste en mémoire
+      final allNotes = isar.notes.where().sortByUpdatedAtDesc().findAllSync();
+      return allNotes.where((note) => note.categoryId == categoryId).toList();
+    } catch (e) {
+      debugPrint('Erreur lors de la récupération des notes par catégorie: $e');
+      return [];
+    }
+  }
+
+  // Compter les notes d'une catégorie
+  int countNotesByCategory(int categoryId) {
+    try {
+      return isar.notes.filter().categoryIdEqualTo(categoryId).countSync();
+    } catch (e) {
+      debugPrint('Erreur lors du comptage des notes: $e');
+      return 0;
+    }
+  }
+
   // Appliquer les filtres
   List<Note> _applyFilters(List<Note> notes) {
     var filtered = notes;
