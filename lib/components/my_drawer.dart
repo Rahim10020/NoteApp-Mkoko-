@@ -23,7 +23,7 @@ class MyDrawer extends StatelessWidget {
                 end: Alignment.bottomRight,
                 colors: [
                   const Color(0xFF3C82F6),
-                  const Color(0xFF3C82F6).withOpacity(0.8),
+                  const Color(0xFF3C82F6).withValues(alpha: 0.8),
                 ],
               ),
             ),
@@ -36,7 +36,7 @@ class MyDrawer extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),

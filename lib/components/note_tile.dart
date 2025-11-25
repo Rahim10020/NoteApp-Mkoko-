@@ -65,7 +65,7 @@ class NoteTile extends StatelessWidget {
         color: backgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -104,7 +104,7 @@ class NoteTile extends StatelessWidget {
           child: Text(
             _formatDate(updatedAt),
             style: TextStyle(
-              color: textColor.withOpacity(0.7),
+              color: textColor.withValues(alpha: 0.7),
               fontSize: 12,
             ),
           ),

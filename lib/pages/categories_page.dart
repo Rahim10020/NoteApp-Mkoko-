@@ -144,6 +144,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   );
 
                   if (success) {
+                    if (!mounted) return;
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
