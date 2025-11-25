@@ -3,6 +3,7 @@ import 'package:R_noteApp/models/category.dart';
 import 'package:R_noteApp/models/category_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../theme/my_colors.dart';
 
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
@@ -387,7 +388,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF3C82F6),
+        backgroundColor: primaryColor,
         onPressed: _showCreateCategoryDialog,
         child: Icon(
           Icons.add,
