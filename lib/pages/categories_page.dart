@@ -1,7 +1,11 @@
 import 'package:R_noteApp/components/color_picker_dialog.dart';
+import 'package:R_noteApp/components/category_settings.dart';
 import 'package:R_noteApp/models/category.dart';
 import 'package:R_noteApp/models/category_database.dart';
+import 'package:R_noteApp/models/note_database.dart';
+import 'package:R_noteApp/pages/category_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import '../theme/my_colors.dart';
 
@@ -22,7 +26,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     super.dispose();
   }
 
-  // Dialog pour créer une nouvelle catégorie
+  // Creation de categorie
   void _showCreateCategoryDialog() {
     final categoryDb = context.read<CategoryDatabase>();
     final availableColors = categoryDb.getAvailableColors();
@@ -56,7 +60,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Champ nom
+                // Champ nom avec styles de l’ancien fichier
                 TextField(
                   controller: _nameController,
                   maxLength: 20,
@@ -66,14 +70,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       color: Theme.of(context).colorScheme.secondary,
                     ),
                     floatingLabelStyle: TextStyle(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary, // Couleur lors du focus
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    // bordure au focus
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
@@ -88,9 +89,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
+
                 const SizedBox(height: 16),
 
-                // Sélecteur de couleur
                 const Text(
                   'Couleur :',
                   style: TextStyle(
@@ -99,6 +100,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   ),
                 ),
                 const SizedBox(height: 10),
+
+                // Sélecteur couleur
                 GestureDetector(
                   onTap: () {
                     showDialog(
@@ -107,9 +110,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         availableColors: availableColors,
                         selectedColor: _selectedColor,
                         onColorSelected: (color) {
-                          setDialogState(() {
-                            _selectedColor = color;
-                          });
+                          setDialogState(() => _selectedColor = color);
                           Navigator.pop(context);
                         },
                       ),
@@ -170,8 +171,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     _selectedColor!,
                   );
                   if (!context.mounted) return;
+
                   if (success) {
-                    if (!mounted) return;
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -202,11 +203,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
     );
   }
 
-  // Dialog pour modifier une catégorie
+  // notification
   void _showEditCategoryDialog(Category category) {
     final categoryDb = context.read<CategoryDatabase>();
 
-    // Ajouter la couleur actuelle aux couleurs disponibles
     var availableColors = categoryDb.getAvailableColors();
     if (!availableColors.contains(category.colorHex)) {
       availableColors = [category.colorHex, ...availableColors];
@@ -258,9 +258,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         availableColors: availableColors,
                         selectedColor: _selectedColor,
                         onColorSelected: (color) {
-                          setDialogState(() {
-                            _selectedColor = color;
-                          });
+                          setDialogState(() => _selectedColor = color);
                           Navigator.pop(context);
                         },
                       ),
@@ -328,8 +326,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
     );
   }
 
-  // Confirmer la suppression
+  // Suppression de catégorie avec confirmation
   void _confirmDelete(Category category) {
+    final noteDb = context.read<NoteDatabase>();
+    final noteCount = noteDb.countNotesByCategory(category.id);
+
+    final isDefault = category.isDefault;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -338,42 +341,55 @@ class _CategoriesPageState extends State<CategoriesPage> {
         ),
         title: const Text('Supprimer la catégorie'),
         content: Text(
-          'Voulez-vous vraiment supprimer "${category.name}" ?\n\nLes notes associées ne seront pas supprimées.',
+          isDefault
+              ? 'Impossible de supprimer une catégorie par défaut.'
+              : noteCount > 0
+                  ? 'Voulez-vous vraiment supprimer "${category.name}" ?\n\n'
+                      '$noteCount note${noteCount > 1 ? "s" : ""} seront détachées de cette catégorie mais ne seront pas supprimées.'
+                  : 'Voulez-vous vraiment supprimer "${category.name}" ?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Annuler'),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              final success = await context
-                  .read<CategoryDatabase>()
-                  .deleteCategory(category.id);
-              if (!context.mounted) return;
-              Navigator.pop(context);
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Catégorie supprimée'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+          if (!isDefault)
+            ElevatedButton(
+              onPressed: () async {
+                final success = await context
+                    .read<CategoryDatabase>()
+                    .deleteCategory(category.id);
+
+                if (!context.mounted) return;
+                Navigator.pop(context);
+
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Catégorie supprimée'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: const Text('Supprimer'),
             ),
-            child: const Text('Supprimer'),
-          ),
         ],
       ),
     );
   }
 
+  // ----------------------------
+  //                UI
+  // ----------------------------
+
   @override
   Widget build(BuildContext context) {
     final categoryDb = context.watch<CategoryDatabase>();
+    final noteDb = context.watch<NoteDatabase>();
     final categories = categoryDb.currentCategories;
 
     return Scaffold(
@@ -400,7 +416,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.category_outlined,
                     size: 80,
                     color: Colors.white,
@@ -423,68 +439,103 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 final category = categories[index];
                 final color =
                     Color(int.parse('FF${category.colorHex}', radix: 16));
+                final noteCount =
+                    noteDb.countNotesByCategory(category.id); // NEW
 
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                return GestureDetector(
+                  onTap: () {
+                    // 🔥 Naviguer vers CategoryDetailPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            CategoryDetailPage(category: category),
                       ),
-                    ],
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                    leading: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                    ),
-                    title: Text(
-                      category.name,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
-                    subtitle: category.isDefault
-                        ? Text(
-                            'Catégorie par défaut',
+                      title: Text(
+                        category.name,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (category.isDefault)
+                            Text(
+                              'Catégorie par défaut',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 12,
+                              ),
+                            ),
+
+                          // 🔥 Nouveau : nombre de notes
+                          Text(
+                            '$noteCount note${noteCount > 1 ? "s" : ""}',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 12,
                             ),
-                          )
-                        : null,
-                    trailing: category.isDefault
-                        ? null
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit_outlined),
-                                onPressed: () =>
-                                    _showEditCategoryDialog(category),
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline),
-                                onPressed: () => _confirmDelete(category),
-                                color: Colors.red,
-                              ),
-                            ],
                           ),
+                        ],
+                      ),
+
+                      // 🔥 Nouveau : menu Popover
+                      trailing: Builder(
+                        builder: (context) => IconButton(
+                          icon: const Icon(Icons.more_horiz),
+                          color: Theme.of(context).colorScheme.secondary,
+                          onPressed: () => showPopover(
+                            width: 120,
+                            height: 110,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
+                            context: context,
+                            bodyBuilder: (context) => CategorySettings(
+                              isDefault: category.isDefault,
+                              onEditTap: () {
+                                Navigator.pop(context);
+                                _showEditCategoryDialog(category);
+                              },
+                              onDeleteTap: () {
+                                Navigator.pop(context);
+                                _confirmDelete(category);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },

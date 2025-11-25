@@ -1,6 +1,5 @@
 import 'package:R_noteApp/components/note_tile.dart';
 import 'package:R_noteApp/models/category.dart';
-import 'package:R_noteApp/models/category_database.dart';
 import 'package:R_noteApp/models/note.dart';
 import 'package:R_noteApp/models/note_database.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +73,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                   decoration: BoxDecoration(
                     color: Color(int.parse('FF${widget.category.colorHex}',
                             radix: 16))
-                        .withOpacity(0.2),
+                        .withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: Color(int.parse('FF${widget.category.colorHex}',
@@ -170,7 +169,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                         categoryId: widget.category.id,
                         isImportant: isImportant,
                       );
-
+                  if (!context.mounted) return;
                   if (success) {
                     textController.clear();
                     Navigator.pop(context);
@@ -293,6 +292,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                         categoryId: widget.category.id,
                         isImportant: isImportant,
                       );
+                  if (!context.mounted) return;
 
                   if (success) {
                     textController.clear();
@@ -361,6 +361,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
           ElevatedButton(
             onPressed: () async {
               final success = await context.read<NoteDatabase>().deleteNote(id);
+              if (!context.mounted) return;
               Navigator.pop(context);
 
               if (success) {
@@ -439,7 +440,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                 end: Alignment.bottomCenter,
                 colors: [
                   categoryColor,
-                  categoryColor.withOpacity(0.8),
+                  categoryColor.withValues(alpha: 0.8),
                 ],
               ),
             ),
@@ -470,7 +471,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -490,7 +491,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                       ? "Aucune note"
                       : "${categoryNotes.length} note${categoryNotes.length > 1 ? 's' : ''}",
                   style: TextStyle(
-                    color: _getTextColor(categoryColor).withOpacity(0.8),
+                    color: _getTextColor(categoryColor).withValues(alpha: 0.8),
                     fontSize: 14,
                   ),
                 ),
