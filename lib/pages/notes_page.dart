@@ -709,7 +709,7 @@ class _NotesPageState extends State<NotesPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF3C82F6),
+                    color: primaryColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(

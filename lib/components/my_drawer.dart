@@ -1,6 +1,7 @@
 import 'package:R_noteApp/components/my_drawer_tile.dart';
 import 'package:R_noteApp/pages/categories_page.dart';
 import 'package:R_noteApp/pages/settings_page.dart';
+import 'package:R_noteApp/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,8 +23,8 @@ class MyDrawer extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  const Color(0xFF3C82F6),
-                  const Color(0xFF3C82F6).withValues(alpha: 0.8),
+                  primaryColor,
+                  primaryColor.withValues(alpha: 0.8),
                 ],
               ),
             ),
@@ -45,7 +46,7 @@ class MyDrawer extends StatelessWidget {
                   child: const Icon(
                     Icons.edit_note_rounded,
                     size: 40,
-                    color: Color(0xFF3C82F6),
+                    color: primaryColor,
                   ),
                 ),
                 const SizedBox(height: 15),
