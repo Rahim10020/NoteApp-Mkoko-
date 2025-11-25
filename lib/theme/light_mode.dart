@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+// Palette de couleurs plus moderne et attrayante
 ThemeData lightMode = ThemeData(
   colorScheme: ColorScheme.light(
-    surface: const Color(0xFFEDEDED),
-    primary: const Color(0xFFD1D1D1),
-    secondary: const Color(0xFF7D7D7D),
-    inversePrimary: Colors.black,
+    surface: const Color(0xFFF5F5F7),
+    primary: const Color(0xFFFFFFFF),
+    secondary: const Color(0xFF8E8E93),
+    inversePrimary: const Color(0xFF1C1C1E),
   ),
 );
