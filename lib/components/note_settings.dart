@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/my_colors.dart';
 
 class NoteSettings extends StatelessWidget {
   final Function()? onEditTap;
@@ -47,7 +48,7 @@ class NoteSettings extends StatelessWidget {
               child: Text(
                 "Delete",
                 style: TextStyle(
-                  color: Colors.red,
+                  color: deleteColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),

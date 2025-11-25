@@ -183,7 +183,7 @@ class _NotesPageState extends State<NotesPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("La note ne peut pas être vide"),
-                        backgroundColor: Colors.orange,
+                        backgroundColor: warningColor,
                       ),
                     );
                     return;
@@ -203,7 +203,7 @@ class _NotesPageState extends State<NotesPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Note créée avec succès"),
-                        backgroundColor: Colors.green,
+                        backgroundColor: successColor,
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -373,7 +373,7 @@ class _NotesPageState extends State<NotesPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("La note ne peut pas être vide"),
-                        backgroundColor: Colors.orange,
+                        backgroundColor: warningColor,
                       ),
                     );
                     return;
@@ -392,7 +392,7 @@ class _NotesPageState extends State<NotesPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Note modifiée avec succès"),
-                        backgroundColor: Colors.green,
+                        backgroundColor: successColor,
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -458,14 +458,14 @@ class _NotesPageState extends State<NotesPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text("Note supprimée"),
-                    backgroundColor: Colors.red,
+                    backgroundColor: deleteColor,
                     duration: Duration(seconds: 2),
                   ),
                 );
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: deleteColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -529,7 +529,7 @@ class _NotesPageState extends State<NotesPage> {
                 CheckboxListTile(
                   title: Row(
                     children: const [
-                      Icon(Icons.star, color: Colors.amber, size: 20),
+                      Icon(Icons.star, color: importantColor, size: 20),
                       SizedBox(width: 8),
                       Expanded(
                         child: Text('Seulement les importantes'),
@@ -651,7 +651,7 @@ class _NotesPageState extends State<NotesPage> {
                       width: 8,
                       height: 8,
                       decoration: const BoxDecoration(
-                        color: Colors.red,
+                        color: deleteColor,
                         shape: BoxShape.circle,
                       ),
                     ),

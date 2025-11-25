@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/my_colors.dart';
 
 class CategorySettings extends StatelessWidget {
   final Function()? onEditTap;
@@ -53,7 +54,7 @@ class CategorySettings extends StatelessWidget {
                 style: TextStyle(
                   color: isDefault
                       ? Theme.of(context).colorScheme.secondary
-                      : Colors.red,
+                      : deleteColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),

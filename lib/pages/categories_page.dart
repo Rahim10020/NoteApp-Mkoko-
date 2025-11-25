@@ -35,7 +35,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Toutes les couleurs sont déjà utilisées'),
-          backgroundColor: Colors.orange,
+          backgroundColor: warningColor,
         ),
       );
       return;
@@ -160,7 +160,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Le nom ne peut pas être vide'),
-                        backgroundColor: Colors.orange,
+                        backgroundColor: warningColor,
                       ),
                     );
                     return;
@@ -177,14 +177,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Catégorie créée avec succès'),
-                        backgroundColor: Colors.green,
+                        backgroundColor: successColor,
                       ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Ce nom existe déjà'),
-                        backgroundColor: Colors.red,
+                        backgroundColor: deleteColor,
                       ),
                     );
                   }
@@ -305,14 +305,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Catégorie modifiée'),
-                        backgroundColor: Colors.green,
+                        backgroundColor: successColor,
                       ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Ce nom existe déjà'),
-                        backgroundColor: Colors.red,
+                        backgroundColor: deleteColor,
                       ),
                     );
                   }
@@ -367,13 +367,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Catégorie supprimée'),
-                      backgroundColor: Colors.red,
+                      backgroundColor: deleteColor,
                     ),
                   );
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: deleteColor,
               ),
               child: const Text('Supprimer'),
             ),
@@ -439,12 +439,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 final category = categories[index];
                 final color =
                     Color(int.parse('FF${category.colorHex}', radix: 16));
-                final noteCount =
-                    noteDb.countNotesByCategory(category.id); // NEW
+                final noteCount = noteDb.countNotesByCategory(category.id);
 
                 return GestureDetector(
                   onTap: () {
-                    // 🔥 Naviguer vers CategoryDetailPage
+                    // Naviguer vers CategoryDetailPage
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -499,7 +498,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                               ),
                             ),
 
-                          // 🔥 Nouveau : nombre de notes
+                          // nombre de notes
                           Text(
                             '$noteCount note${noteCount > 1 ? "s" : ""}',
                             style: TextStyle(
@@ -510,7 +509,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         ],
                       ),
 
-                      // 🔥 Nouveau : menu Popover
+                      // Nouveau : menu Popover
                       trailing: Builder(
                         builder: (context) => IconButton(
                           icon: const Icon(Icons.more_horiz),

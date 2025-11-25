@@ -2,6 +2,7 @@ import 'package:R_noteApp/components/note_tile.dart';
 import 'package:R_noteApp/models/category.dart';
 import 'package:R_noteApp/models/note.dart';
 import 'package:R_noteApp/models/note_database.dart';
+import 'package:R_noteApp/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -158,7 +159,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("La note ne peut pas être vide"),
-                        backgroundColor: Colors.orange,
+                        backgroundColor: warningColor,
                       ),
                     );
                     return;
@@ -177,7 +178,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Note créée avec succès"),
-                        backgroundColor: Colors.green,
+                        backgroundColor: successColor,
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -280,7 +281,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("La note ne peut pas être vide"),
-                        backgroundColor: Colors.orange,
+                        backgroundColor: warningColor,
                       ),
                     );
                     return;
@@ -301,7 +302,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Note modifiée avec succès"),
-                        backgroundColor: Colors.green,
+                        backgroundColor: successColor,
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -369,14 +370,14 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text("Note supprimée"),
-                    backgroundColor: Colors.red,
+                    backgroundColor: deleteColor,
                     duration: Duration(seconds: 2),
                   ),
                 );
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: deleteColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

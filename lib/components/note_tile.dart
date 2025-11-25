@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../theme/my_colors.dart';
 
 class NoteTile extends StatelessWidget {
   final String text;
@@ -82,7 +83,7 @@ class NoteTile extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8),
                 child: Icon(
                   Icons.star,
-                  color: Colors.amber,
+                  color: importantColor,
                   size: 20,
                 ),
               ),
