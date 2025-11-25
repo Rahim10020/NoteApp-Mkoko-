@@ -142,7 +142,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     _nameController.text,
                     _selectedColor!,
                   );
-
+                  if (!context.mounted) return;
                   if (success) {
                     if (!mounted) return;
                     Navigator.pop(context);
@@ -269,7 +269,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     _nameController.text,
                     _selectedColor!,
                   );
-
+                  if (!context.mounted) return;
                   if (success) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -318,9 +318,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
               final success = await context
                   .read<CategoryDatabase>()
                   .deleteCategory(category.id);
-
+              if (!context.mounted) return;
               Navigator.pop(context);
-
               if (success) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -400,7 +399,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

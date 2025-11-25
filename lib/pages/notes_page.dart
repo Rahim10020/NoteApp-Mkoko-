@@ -193,7 +193,7 @@ class _NotesPageState extends State<NotesPage> {
                         categoryId: selectedCategoryId,
                         isImportant: isImportant,
                       );
-
+                  if (!context.mounted) return;
                   if (success) {
                     textController.clear();
                     selectedCategoryId = null;
@@ -384,7 +384,7 @@ class _NotesPageState extends State<NotesPage> {
                         categoryId: selectedCategoryId,
                         isImportant: isImportant,
                       );
-
+                  if (!context.mounted) return;
                   if (success) {
                     textController.clear();
                     Navigator.pop(context);
@@ -449,6 +449,7 @@ class _NotesPageState extends State<NotesPage> {
           ElevatedButton(
             onPressed: () async {
               final success = await context.read<NoteDatabase>().deleteNote(id);
+              if (!context.mounted) return;
 
               Navigator.pop(context);
 
