@@ -387,8 +387,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF3C82F6),
         onPressed: _showCreateCategoryDialog,
-        backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(
           Icons.add,
           color: Theme.of(context).colorScheme.inversePrimary,
@@ -402,7 +402,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   Icon(
                     Icons.category_outlined,
                     size: 80,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.white,
                   ),
                   const SizedBox(height: 16),
                   Text(
