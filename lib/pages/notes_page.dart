@@ -547,6 +547,9 @@ class _NotesPageState extends State<NotesPage> {
                     });
                   },
                   controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                  activeColor: importantColor, // Couleur de fond quand coché
+                  checkColor: Colors.white, // Couleur de la coche
                 ),
                 const SizedBox(height: 16),
 
