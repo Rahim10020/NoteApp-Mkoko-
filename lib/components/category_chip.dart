@@ -1,5 +1,6 @@
 import 'package:R_noteApp/models/category.dart';
 import 'package:flutter/material.dart';
+import '../theme/my_colors.dart';
 
 class CategoryChip extends StatelessWidget {
   final Category category;
@@ -16,13 +17,21 @@ class CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Color(int.parse('FF${category.colorHex}', radix: 16));
+    // Determiner si c'est le mode clair
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // Vérifier si la couleur est jaune (vous pouvez ajuster cette condition)
+    final isYellow = category.colorHex.toUpperCase() == 'FFE66D' ||
+        category.name.toLowerCase() == 'études';
+    // Utiliser noir en mode clair pour la catégorie jaune
+    final displayColor =
+        (!isDarkMode && isYellow) ? etudeBackgroundColor : color;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? color : color.withValues(alpha: 0.2),
+          color: isSelected ? color : displayColor.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: color,

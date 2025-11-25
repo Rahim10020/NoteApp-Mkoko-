@@ -5,3 +5,4 @@ const Color deleteColor = Colors.red;
 const Color importantColor = Colors.amber;
 const Color warningColor = Colors.orange;
 const Color successColor = Colors.green;
+const Color etudeBackgroundColor = Color(0xFF000000);
